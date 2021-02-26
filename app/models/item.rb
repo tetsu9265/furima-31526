@@ -10,7 +10,7 @@ class Item < ApplicationRecord
   belongs_to :shipping_time
 
   with_options presence: true do
-    validates :name
+    validates :name ,length: { maximum: 40 }
     validates :description
     validates :image
   end
