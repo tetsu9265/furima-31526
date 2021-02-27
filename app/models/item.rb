@@ -10,7 +10,7 @@ class Item < ApplicationRecord
   belongs_to :shipping_time
 
   with_options presence: true do
-    validates :name ,length: { maximum: 40 }
+    validates :name, length: { maximum: 40 }
     validates :description
     validates :image
   end
@@ -21,5 +21,5 @@ class Item < ApplicationRecord
     validates :prefecture_id
     validates :shipping_time_id
   end
-  validates :price, presence: true, numericality: { only_integer: true,  greater_than: 299, less_than: 10000000 }
+  validates :price, presence: true, numericality: { only_integer: true, greater_than: 299, less_than: 10_000_000 }
 end
