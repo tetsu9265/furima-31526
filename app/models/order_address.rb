@@ -3,12 +3,17 @@ class OrderAddress
   attr_accessor :user, :item, :postal_code, :prefecture_id, :municipalities, :block_number, :building, :phone_number
 
   with_options presence: true do
-    validates :user_id
-    validates :item_id
+    validates :user
+    validates :item
     validates :postal_code
-    validates :prefecture_id, numericality: { other_than: 0, message: "can't be blank" }
+    validates :prefecture_id, numericality: { other_than: 1, message: "can't be blank" }
     validates :municipalities
     validates :block_number
     validates :phone_number
+  end
+
+  def save
+    order = Order.create(user_id: user.id, item_id: item.id)
+    Address.create(postal_code: postal_code, prefecture_id: prefecture_id, municipalities: municipalities, block_number: block_number, building: building, phone_number: phone_number, order_id: order.id)
   end
 end
