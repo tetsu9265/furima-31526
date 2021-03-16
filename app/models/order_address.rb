@@ -9,6 +9,7 @@ class OrderAddress
     validates :municipalities
     validates :block_number
     validates :phone_number, numericality: { only_integer: true }, length: { in: 10..11 }
+    validates :token
   end
 
   def save
