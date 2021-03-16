@@ -1,16 +1,17 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :move_to_top_page
+
   def index
     @order_address = OrderAddress.new
-    @order_address.user = User.find(current_user.id)
-    @order_address.item = Item.find(params[:item_id])
+    set_user
+    set_item
   end
 
   def create
     @order_address = OrderAddress.new(order_address_params)
-    @order_address.user = User.find(current_user.id)
-    @order_address.item = Item.find(params[:item_id])
+    set_user
+    set_item
     if @order_address.valid?
       pay_item
       @order_address.save
@@ -39,10 +40,16 @@ class OrdersController < ApplicationController
   def move_to_top_page
     item = Item.find(params[:item_id])
     seller_id = item.user.id
-    if current_user.id == seller_id
-      redirect_to root_path
-    elsif Order.find_by(item_id: item.id).present?
+    if current_user.id == seller_id || Order.find_by(item_id: item.id).present?
       redirect_to root_path
     end
+  end
+
+  def set_user
+    @order_address.user = User.find(current_user.id)
+  end
+
+  def set_item
+    @order_address.item = Item.find(params[:item_id])
   end
 end
