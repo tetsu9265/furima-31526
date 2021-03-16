@@ -1,4 +1,6 @@
 class OrdersController < ApplicationController
+  before_action :authenticate_user!
+  before_action :move_to_top_page
   def index
     @order_address = OrderAddress.new
     @order_address.user = User.find(current_user.id)
@@ -31,5 +33,15 @@ class OrdersController < ApplicationController
       card: order_address_params[:token],
       currency: 'jpy'
     )
+  end
+
+  def move_to_top_page
+    item = Item.find(params[:item_id])
+    seller_id = item.user.id
+    if current_user.id == seller_id
+      redirect_to root_path
+    elsif Order.find_by(item_id: item.id).present?
+      redirect_to root_path
+    end
   end
 end
