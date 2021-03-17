@@ -44,7 +44,6 @@ RSpec.describe OrderAddress, type: :model do
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include("Block number can't be blank")
       end
-  
       it 'phone_numberが空だと保存できないこと' do
         @order_address.phone_number = nil
         @order_address.valid?
@@ -55,10 +54,25 @@ RSpec.describe OrderAddress, type: :model do
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include('Phone number is too long (maximum is 11 characters)')
       end
+      it 'phone_numberが英数混合では登録できないこと' do
+        @order_address.phone_number = 'abcdef12345'
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include("Phone number is not a number")
+      end
       it 'tokenが空では保存できないこと' do
         @order_address.token = nil
         @order_address.valid?
         expect(@order_address.errors.full_messages).to include("Token can't be blank")
+      end
+      it 'userが空では保存できないこと' do
+        @order_address.user = nil
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include("User can't be blank")
+      end
+      it 'itemが空では保存できないこと' do
+        @order_address.item = nil
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include("Item can't be blank")
       end
     end
   end
