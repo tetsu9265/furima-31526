@@ -4,6 +4,8 @@ RSpec.describe OrderAddress, type: :model do
   describe '注文情報の保存' do
     before do
       @order_address = FactoryBot.build(:order_address)
+      @order_address.user = FactoryBot.build(:user)
+      @order_address.item = FactoryBot.build(:item)
     end
 
     context '注文情報が保存できる時' do
