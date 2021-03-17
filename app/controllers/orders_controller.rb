@@ -40,8 +40,6 @@ class OrdersController < ApplicationController
 
   def move_to_top_page
     seller_id = @item.user.id
-    if current_user.id == seller_id || Order.find_by(item_id: @item.id).present?
-      redirect_to root_path
-    end
+    redirect_to root_path if current_user.id == seller_id || Order.find_by(item_id: @item.id).present?
   end
 end
