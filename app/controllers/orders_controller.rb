@@ -4,14 +4,11 @@ class OrdersController < ApplicationController
 
   def index
     @order_address = OrderAddress.new
-    set_user
-    set_item
+    @order_address.item = Item.find(params[:item_id])
   end
 
   def create
     @order_address = OrderAddress.new(order_address_params)
-    set_user
-    set_item
     if @order_address.valid?
       pay_item
       @order_address.save
@@ -25,7 +22,7 @@ class OrdersController < ApplicationController
 
   def order_address_params
     params.require(:order_address).permit(:postal_code, :prefecture_id, :municipalities, :block_number, :building,
-                                          :phone_number).merge(token: params[:token])
+                                          :phone_number).merge(token: params[:token], user: current_user, item: Item.find(params[:item_id]))
   end
 
   def pay_item
@@ -43,13 +40,5 @@ class OrdersController < ApplicationController
     if current_user.id == seller_id || Order.find_by(item_id: item.id).present?
       redirect_to root_path
     end
-  end
-
-  def set_user
-    @order_address.user = User.find(current_user.id)
-  end
-
-  def set_item
-    @order_address.item = Item.find(params[:item_id])
   end
 end
